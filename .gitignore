@@ -1,0 +1,29 @@
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+.Python
+.env
+.venv/
+venv/
+env/
+ENV/
+.streamlit/secrets.toml
+
+# Build and cache artifacts
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Model weights and local assets
+models/**/*.pth
+models/**/*.pb
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

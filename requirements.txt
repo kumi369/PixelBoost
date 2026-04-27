@@ -1,0 +1,9 @@
+streamlit>=1.44.0
+Pillow>=10.3.0
+numpy>=1.26.4
+opencv-contrib-python>=4.10.0.84
+realesrgan>=0.3.0
+basicsr>=1.4.2
+torch>=2.2.0
+torchvision>=0.17.0
+streamlit-image-comparison>=0.0.4
