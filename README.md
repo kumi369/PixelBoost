@@ -44,13 +44,19 @@ PixelBoost/
 ## Setup
 
 1. Create and activate a virtual environment.
-2. Install dependencies:
+2. Install core dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-3. Create the model folders:
+3. Optional: install the heavier Real-ESRGAN stack for the preferred backend:
+
+```bash
+pip install realesrgan basicsr torch torchvision
+```
+
+4. Create the model folders:
 
 ```bash
 mkdir models
@@ -86,6 +92,12 @@ If you do not want the heavier Real-ESRGAN setup, download these pretrained Tens
 
 - `FSRCNN_x2.pb`
 - `EDSR_x4.pb`
+
+You can also use the included PowerShell helper:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\download_opencv_models.ps1
+```
 
 OpenCV documents the supported `dnn_superres` workflow here:
 [OpenCV Super Resolution Tutorial](https://docs.opencv.org/4.x/d5/d29/tutorial_dnn_superres_upscale_image_single.html)

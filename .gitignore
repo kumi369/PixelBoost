@@ -6,6 +6,8 @@ __pycache__/
 .Python
 .env
 .venv/
+.python_packages/
+.tmp/
 venv/
 env/
 ENV/
