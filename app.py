@@ -113,13 +113,9 @@ def render_image_details(details: dict[str, str | int], title: str) -> None:
 def render_comparison(original, enhanced) -> None:
     st.subheader("Before / After Comparison")
     if image_comparison is not None:
-        original_buffer = BytesIO()
-        enhanced_buffer = BytesIO()
-        original.save(original_buffer, format="PNG")
-        enhanced.save(enhanced_buffer, format="PNG")
         image_comparison(
-            img1=original_buffer.getvalue(),
-            img2=enhanced_buffer.getvalue(),
+            img1=original.convert("RGB"),
+            img2=enhanced.convert("RGB"),
             label1="Original",
             label2="Upscaled",
             width=760,
