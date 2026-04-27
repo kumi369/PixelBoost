@@ -5,7 +5,12 @@ from functools import lru_cache
 import cv2
 from PIL import Image
 
-from pixelboost.config import OPENCV_MODEL_PATHS, REALESRGAN_MODEL_PATHS
+from pixelboost.config import (
+    FAST_4X_MAX_INPUT_PIXELS,
+    OPENCV_MODEL_PATHS,
+    OPENCV_PROGRESSIVE_MODEL_PATH,
+    REALESRGAN_MODEL_PATHS,
+)
 from pixelboost.image_utils import (
     bgr_array_to_pil,
     pil_to_bgr_array,
@@ -27,6 +32,9 @@ class BaseUpscaler:
 
     def upscale(self, image: Image.Image) -> Image.Image:
         raise NotImplementedError
+
+    def get_runtime_note(self, image: Image.Image) -> str | None:
+        return None
 
 
 class RealESRGANUpscaler(BaseUpscaler):
@@ -98,22 +106,47 @@ class OpenCVUpscaler(BaseUpscaler):
             )
 
         try:
-            self.sr = cv2.dnn_superres.DnnSuperResImpl_create()
-            self.sr.readModel(str(model_path))
-            self.sr.setModel(algorithm, scale)
+            self.sr = self._create_superres_model(algorithm, model_path, scale)
+            self.progressive_sr = None
+            if scale == 4 and OPENCV_PROGRESSIVE_MODEL_PATH.exists():
+                self.progressive_sr = self._create_superres_model("fsrcnn", OPENCV_PROGRESSIVE_MODEL_PATH, 2)
         except cv2.error as exc:
             raise ModelConfigurationError(f"Failed to load OpenCV super-resolution model: {exc}") from exc
+
+    @staticmethod
+    def _create_superres_model(algorithm: str, model_path, scale: int):
+        sr = cv2.dnn_superres.DnnSuperResImpl_create()
+        sr.readModel(str(model_path))
+        sr.setModel(algorithm, scale)
+        return sr
+
+    def get_runtime_note(self, image: Image.Image) -> str | None:
+        if self.scale == 4 and image.width * image.height >= FAST_4X_MAX_INPUT_PIXELS:
+            return "Large 4x images use a faster progressive OpenCV path to keep processing practical on CPU."
+        return None
 
     def upscale(self, image: Image.Image) -> Image.Image:
         rgb_image, alpha_channel = split_alpha_if_present(image)
 
         try:
-            output_array = self.sr.upsample(pil_to_bgr_array(rgb_image))
+            output_array = self._upscale_array(pil_to_bgr_array(rgb_image), rgb_image.size)
         except cv2.error as exc:
             raise UpscalingError(f"OpenCV super-resolution processing failed: {exc}") from exc
 
         output_image = bgr_array_to_pil(output_array)
         return restore_alpha_if_needed(output_image, alpha_channel)
+
+    def _upscale_array(self, image_array, image_size: tuple[int, int]):
+        if (
+            self.scale == 4
+            and self.progressive_sr is not None
+            and image_size[0] * image_size[1] >= FAST_4X_MAX_INPUT_PIXELS
+        ):
+            first_pass = self.progressive_sr.upsample(image_array)
+            self.backend_name = "OpenCV DNN SuperRes 4x (progressive FSRCNN)"
+            return self.progressive_sr.upsample(first_pass)
+
+        return self.sr.upsample(image_array)
 
 
 @lru_cache(maxsize=4)
@@ -133,3 +166,8 @@ def upscale_image(image: Image.Image, scale: int) -> tuple[Image.Image, str]:
     upscaler = get_upscaler(scale)
     result = upscaler.upscale(image)
     return result, upscaler.backend_name
+
+
+def get_runtime_note(image: Image.Image, scale: int) -> str | None:
+    upscaler = get_upscaler(scale)
+    return upscaler.get_runtime_note(image)

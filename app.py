@@ -10,7 +10,12 @@ from pixelboost.image_utils import (
     image_to_download_bytes,
     load_uploaded_image,
 )
-from pixelboost.super_resolution import ModelConfigurationError, UpscalingError, upscale_image
+from pixelboost.super_resolution import (
+    ModelConfigurationError,
+    UpscalingError,
+    get_runtime_note,
+    upscale_image,
+)
 
 try:
     from streamlit_image_comparison import image_comparison
@@ -138,6 +143,9 @@ def main() -> None:
         scale = st.selectbox("Upscale factor", options=[2, 4], index=1, format_func=lambda value: f"{value}x")
         st.caption("PixelBoost prefers Real-ESRGAN and falls back to a lighter pretrained OpenCV model if needed.")
         show_metadata = st.toggle("Show image metadata", value=True)
+        st.markdown("---")
+        st.markdown("**Performance Tips**")
+        st.caption("`2x` is faster. `4x` can take longer, especially for large photos on CPU.")
 
     uploaded_file = st.file_uploader(
         "Upload an image",
@@ -165,31 +173,46 @@ def main() -> None:
         if show_metadata:
             render_image_details(original_details, "Input Details")
 
+    runtime_note = get_runtime_note(original_image, scale)
+    if runtime_note:
+        st.warning(runtime_note)
+
     if not st.button("Upscale Image", type="primary", use_container_width=True):
         return
 
     progress = st.progress(0, text="Preparing image...")
+    status_box = st.empty()
+    status_box.info("Preparing image for enhancement...")
 
     try:
-        progress.progress(20, text="Loading pretrained model...")
+        progress.progress(15, text="Loading pretrained model...")
+        status_box.info("Loading the best available super-resolution backend...")
+        progress.progress(45, text="Enhancing image...")
+        status_box.info("Enhancing image. Larger 4x images can take longer on CPU.")
         enhanced_image, backend_name = upscale_image(original_image, scale=scale)
+        progress.progress(85, text="Rendering comparison...")
+        status_box.info("Rendering final preview and download output...")
         progress.progress(100, text="Enhancement complete.")
     except ModelConfigurationError as exc:
         progress.empty()
+        status_box.empty()
         st.error(str(exc))
         st.info("Check the README for exact model download and placement steps.")
         return
     except UpscalingError as exc:
         progress.empty()
+        status_box.empty()
         st.error(str(exc))
         return
     except Exception as exc:  # pragma: no cover - defensive runtime fallback
         progress.empty()
+        status_box.empty()
         st.error(f"Unexpected processing failure: {exc}")
         return
 
     enhanced_bytes = image_to_download_bytes(enhanced_image)
     enhanced_details = get_image_details(enhanced_image, enhanced_bytes, f"pixelboost_{uploaded_file.name}")
+    status_box.success("Image enhancement finished successfully.")
 
     st.markdown('<p class="success-chip">Upscaling completed successfully</p>', unsafe_allow_html=True)
     st.caption(f"Backend used: `{backend_name}`")

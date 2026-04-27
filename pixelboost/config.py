@@ -18,3 +18,6 @@ OPENCV_MODEL_PATHS = {
     2: ("fsrcnn", MODEL_DIR / "opencv" / "FSRCNN_x2.pb"),
     4: ("edsr", MODEL_DIR / "opencv" / "EDSR_x4.pb"),
 }
+
+OPENCV_PROGRESSIVE_MODEL_PATH = MODEL_DIR / "opencv" / "FSRCNN_x2.pb"
+FAST_4X_MAX_INPUT_PIXELS = 512 * 512

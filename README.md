@@ -132,6 +132,7 @@ streamlit run app.py
 - Real-ESRGAN usually provides stronger visual quality, but it has a heavier dependency footprint.
 - The app caches the selected upscaler so the model does not reload for every request.
 - Transparent PNG images are supported; alpha is restored after RGB upscaling.
+- Large `4x` images on CPU automatically switch to a faster progressive OpenCV path for a smoother demo experience.
 
 ## Resume-Friendly Summary
 
