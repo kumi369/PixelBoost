@@ -8,6 +8,7 @@ __pycache__/
 .venv/
 .python_packages/
 .tmp/
+temp/
 venv/
 env/
 ENV/

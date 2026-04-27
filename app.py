@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from io import BytesIO
-
 import streamlit as st
 
 from pixelboost.config import APP_DESCRIPTION, APP_NAME, SUPPORTED_FORMATS
@@ -35,20 +33,155 @@ def inject_styles() -> None:
     st.markdown(
         """
         <style>
+            .block-container {
+                padding-top: 2rem;
+                padding-bottom: 3rem;
+            }
             .stApp {
                 background:
-                    radial-gradient(circle at top left, rgba(18, 164, 120, 0.12), transparent 32%),
-                    radial-gradient(circle at top right, rgba(17, 94, 89, 0.12), transparent 28%),
-                    linear-gradient(180deg, #0f172a 0%, #111827 45%, #0b1120 100%);
+                    radial-gradient(circle at top left, rgba(18, 164, 120, 0.16), transparent 28%),
+                    radial-gradient(circle at top right, rgba(59, 130, 246, 0.16), transparent 24%),
+                    linear-gradient(180deg, #09111f 0%, #101826 48%, #0b1220 100%);
             }
             .hero-card,
             .info-card {
                 border: 1px solid rgba(255, 255, 255, 0.08);
-                background: rgba(15, 23, 42, 0.72);
+                background: rgba(15, 23, 42, 0.76);
                 backdrop-filter: blur(10px);
-                border-radius: 18px;
-                padding: 1.1rem 1.2rem;
+                border-radius: 22px;
+                padding: 1.25rem 1.3rem;
                 box-shadow: 0 20px 60px rgba(15, 23, 42, 0.22);
+            }
+            .hero-card {
+                position: relative;
+                overflow: hidden;
+                padding: 1.6rem 1.5rem;
+                margin-bottom: 1.25rem;
+            }
+            .hero-card::after {
+                content: "";
+                position: absolute;
+                inset: auto -8% -30% auto;
+                width: 240px;
+                height: 240px;
+                border-radius: 999px;
+                background: radial-gradient(circle, rgba(56, 189, 248, 0.18), transparent 65%);
+            }
+            .hero-kicker {
+                display: inline-block;
+                margin-bottom: 0.75rem;
+                padding: 0.35rem 0.7rem;
+                border-radius: 999px;
+                border: 1px solid rgba(125, 211, 252, 0.2);
+                background: rgba(14, 165, 233, 0.12);
+                color: #bae6fd;
+                font-size: 0.82rem;
+                font-weight: 600;
+                letter-spacing: 0.03em;
+                text-transform: uppercase;
+            }
+            .hero-grid {
+                display: grid;
+                grid-template-columns: minmax(0, 1.6fr) minmax(250px, 1fr);
+                gap: 1rem;
+                align-items: start;
+            }
+            .hero-metrics {
+                display: grid;
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+                gap: 0.75rem;
+            }
+            .hero-metric,
+            .feature-chip,
+            .stage-card,
+            .image-panel {
+                border: 1px solid rgba(255, 255, 255, 0.08);
+                background: rgba(255, 255, 255, 0.04);
+                border-radius: 18px;
+            }
+            .hero-metric {
+                padding: 0.95rem 1rem;
+            }
+            .hero-metric-label {
+                color: #94a3b8;
+                font-size: 0.78rem;
+                text-transform: uppercase;
+                letter-spacing: 0.06em;
+            }
+            .hero-metric-value {
+                color: #f8fafc;
+                font-size: 1rem;
+                font-weight: 700;
+                margin-top: 0.35rem;
+            }
+            .section-kicker {
+                color: #7dd3fc;
+                font-size: 0.78rem;
+                font-weight: 700;
+                letter-spacing: 0.08em;
+                text-transform: uppercase;
+                margin-bottom: 0.4rem;
+            }
+            .feature-row {
+                display: grid;
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+                gap: 0.8rem;
+                margin: 0.6rem 0 1.2rem;
+            }
+            .feature-chip {
+                padding: 0.95rem 1rem;
+            }
+            .feature-chip-title {
+                color: #f8fafc;
+                font-weight: 700;
+                margin-bottom: 0.2rem;
+            }
+            .feature-chip-copy {
+                color: #cbd5e1;
+                font-size: 0.9rem;
+                line-height: 1.45;
+            }
+            .upload-note,
+            .stage-grid {
+                margin: 0.75rem 0 1rem;
+            }
+            .upload-note {
+                padding: 1rem 1.05rem;
+                border-radius: 18px;
+                border: 1px dashed rgba(125, 211, 252, 0.25);
+                background: rgba(14, 165, 233, 0.08);
+                color: #dbeafe;
+            }
+            .stage-grid {
+                display: grid;
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+                gap: 0.8rem;
+            }
+            .stage-card {
+                padding: 1rem;
+            }
+            .stage-card-title {
+                color: #f8fafc;
+                font-weight: 700;
+                margin-bottom: 0.25rem;
+            }
+            .stage-card-copy {
+                color: #cbd5e1;
+                font-size: 0.9rem;
+                line-height: 1.45;
+            }
+            .image-panel {
+                padding: 0.9rem;
+                margin-bottom: 0.9rem;
+            }
+            .image-panel-title {
+                color: #f8fafc;
+                font-weight: 700;
+                margin-bottom: 0.2rem;
+            }
+            .image-panel-copy {
+                color: #94a3b8;
+                font-size: 0.9rem;
             }
             .metric-label {
                 color: #94a3b8;
@@ -70,6 +203,14 @@ def inject_styles() -> None:
                 font-size: 0.88rem;
                 font-weight: 600;
             }
+            @media (max-width: 900px) {
+                .hero-grid,
+                .hero-metrics,
+                .feature-row,
+                .stage-grid {
+                    grid-template-columns: 1fr;
+                }
+            }
         </style>
         """,
         unsafe_allow_html=True,
@@ -80,8 +221,54 @@ def render_header() -> None:
     st.markdown(
         f"""
         <div class="hero-card">
-            <h1 style="margin-bottom:0.4rem;">{APP_NAME}</h1>
-            <p style="margin:0;color:#cbd5e1;font-size:1rem;">{APP_DESCRIPTION}</p>
+            <div class="hero-kicker">AI Super Resolution Studio</div>
+            <div class="hero-grid">
+                <div>
+                    <h1 style="margin-bottom:0.45rem;font-size:2.6rem;">{APP_NAME}</h1>
+                    <p style="margin:0 0 1rem;color:#cbd5e1;font-size:1.03rem;max-width:48rem;">{APP_DESCRIPTION}</p>
+                    <div class="hero-metrics">
+                        <div class="hero-metric">
+                            <div class="hero-metric-label">Modes</div>
+                            <div class="hero-metric-value">2x and 4x</div>
+                        </div>
+                        <div class="hero-metric">
+                            <div class="hero-metric-label">Formats</div>
+                            <div class="hero-metric-value">JPG, PNG, WEBP</div>
+                        </div>
+                        <div class="hero-metric">
+                            <div class="hero-metric-label">Output</div>
+                            <div class="hero-metric-value">Preview and Download</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="info-card" style="margin:0;">
+                    <div class="section-kicker">Workflow</div>
+                    <div style="color:#f8fafc;font-weight:700;margin-bottom:0.35rem;">Upload, upscale, compare, export</div>
+                    <p style="margin:0;color:#cbd5e1;line-height:1.55;">PixelBoost is tuned for fast demos and clear before/after storytelling. Drop in a low-resolution image and turn it into a cleaner, sharper asset in a single flow.</p>
+                </div>
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
+def render_feature_highlights() -> None:
+    st.markdown(
+        """
+        <div class="feature-row">
+            <div class="feature-chip">
+                <div class="feature-chip-title">Fast Demo Flow</div>
+                <div class="feature-chip-copy">A clean upload-to-download journey designed to feel immediate and easy to present.</div>
+            </div>
+            <div class="feature-chip">
+                <div class="feature-chip-title">Smart CPU Handling</div>
+                <div class="feature-chip-copy">Larger 4x requests switch to a practical fallback path so the app stays usable on laptops.</div>
+            </div>
+            <div class="feature-chip">
+                <div class="feature-chip-title">Clear Visual Proof</div>
+                <div class="feature-chip-copy">Original preview, comparison slider, and output metadata make the enhancement easy to explain.</div>
+            </div>
         </div>
         """,
         unsafe_allow_html=True,
@@ -130,9 +317,56 @@ def render_comparison(original, enhanced) -> None:
     st.caption("Install `streamlit-image-comparison` for an interactive slider comparison.")
 
 
+def render_upload_guidance() -> None:
+    st.markdown(
+        """
+        <div class="upload-note">
+            <strong>Best results:</strong> use portraits, product shots, logos, or compressed images where clarity loss is visible. PixelBoost works best when the difference is easy to compare side by side.
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
+def render_empty_state() -> None:
+    st.markdown(
+        """
+        <div class="section-kicker">Start Here</div>
+        <div class="stage-grid">
+            <div class="stage-card">
+                <div class="stage-card-title">1. Upload an Image</div>
+                <div class="stage-card-copy">Choose a JPG, PNG, or WEBP image that looks soft, compressed, or too small.</div>
+            </div>
+            <div class="stage-card">
+                <div class="stage-card-title">2. Pick 2x or 4x</div>
+                <div class="stage-card-copy">Use 2x for a quicker pass or 4x when you want a bigger jump in resolution.</div>
+            </div>
+            <div class="stage-card">
+                <div class="stage-card-title">3. Compare and Export</div>
+                <div class="stage-card-copy">Review the before/after result, inspect the size change, and download the final image.</div>
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
+def render_image_panel(title: str, copy: str) -> None:
+    st.markdown(
+        f"""
+        <div class="image-panel">
+            <div class="image-panel-title">{title}</div>
+            <div class="image-panel-copy">{copy}</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
 def main() -> None:
     inject_styles()
     render_header()
+    render_feature_highlights()
 
     with st.sidebar:
         st.header("Settings")
@@ -143,6 +377,8 @@ def main() -> None:
         st.markdown("**Performance Tips**")
         st.caption("`2x` is faster. `4x` can take longer, especially for large photos on CPU.")
 
+    st.markdown('<div class="section-kicker">Upload</div>', unsafe_allow_html=True)
+    render_upload_guidance()
     uploaded_file = st.file_uploader(
         "Upload an image",
         type=SUPPORTED_FORMATS,
@@ -150,7 +386,7 @@ def main() -> None:
     )
 
     if uploaded_file is None:
-        st.info("Upload a JPG, JPEG, PNG, or WEBP image to begin.")
+        render_empty_state()
         return
 
     try:
@@ -163,7 +399,7 @@ def main() -> None:
 
     preview_col, details_col = st.columns([1.5, 1], gap="large")
     with preview_col:
-        st.subheader("Original Image")
+        render_image_panel("Original Image", "Preview the uploaded source before enhancement.")
         st.image(original_image, use_container_width=True)
     with details_col:
         if show_metadata:
@@ -215,7 +451,7 @@ def main() -> None:
 
     output_col, output_details_col = st.columns([1.5, 1], gap="large")
     with output_col:
-        st.subheader("Enhanced Image")
+        render_image_panel("Enhanced Image", "Review the sharpened result and inspect the visual difference.")
         st.image(enhanced_image, use_container_width=True)
     with output_details_col:
         if show_metadata:
