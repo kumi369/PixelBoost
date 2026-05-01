@@ -405,7 +405,12 @@ def main() -> None:
         if show_metadata:
             render_image_details(original_details, "Input Details")
 
-    runtime_note = get_runtime_note(original_image, scale)
+    try:
+        runtime_note = get_runtime_note(original_image, scale)
+    except ModelConfigurationError as exc:
+        runtime_note = None
+        st.info(f"Model check note: {exc}")
+
     if runtime_note:
         st.warning(runtime_note)
 

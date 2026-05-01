@@ -92,6 +92,7 @@ class OpenCVUpscaler(BaseUpscaler):
     def __init__(self, scale: int) -> None:
         self.scale = scale
         self.backend_name = f"OpenCV DNN SuperRes {scale}x"
+        self.default_backend_name = self.backend_name
         model_info = OPENCV_MODEL_PATHS.get(scale)
         if model_info is None:
             raise ModelConfigurationError(f"No OpenCV fallback model configured for {scale}x.")
@@ -127,6 +128,7 @@ class OpenCVUpscaler(BaseUpscaler):
 
     def upscale(self, image: Image.Image) -> Image.Image:
         rgb_image, alpha_channel = split_alpha_if_present(image)
+        self.backend_name = self.default_backend_name
 
         try:
             output_array = self._upscale_array(pil_to_bgr_array(rgb_image), rgb_image.size)
