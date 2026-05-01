@@ -28,17 +28,19 @@ PixelBoost is a polished Streamlit web app for AI-powered image upscaling. Users
 
 ```text
 PixelBoost/
-├── app.py
-├── requirements.txt
-├── README.md
-├── models/
-│   ├── opencv/
-│   └── realesrgan/
-└── pixelboost/
-    ├── __init__.py
-    ├── config.py
-    ├── image_utils.py
-    └── super_resolution.py
+|-- app.py
+|-- requirements.txt
+|-- README.md
+|-- models/
+|   |-- opencv/
+|   `-- realesrgan/
+|-- pixelboost/
+|   |-- __init__.py
+|   |-- config.py
+|   |-- image_utils.py
+|   `-- super_resolution.py
+`-- scripts/
+    `-- download_opencv_models.ps1
 ```
 
 ## Setup
@@ -47,6 +49,14 @@ PixelBoost/
 2. Install core dependencies:
 
 ```bash
+pip install -r requirements.txt
+```
+
+Windows project-local environment example:
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
@@ -81,9 +91,9 @@ Expected layout:
 
 ```text
 models/
-└── realesrgan/
-    ├── RealESRGAN_x2plus.pth
-    └── RealESRGAN_x4plus.pth
+`-- realesrgan/
+    |-- RealESRGAN_x2plus.pth
+    `-- RealESRGAN_x4plus.pth
 ```
 
 ### Fallback: OpenCV DNN Super-Resolution Models
@@ -106,15 +116,21 @@ Expected layout:
 
 ```text
 models/
-└── opencv/
-    ├── FSRCNN_x2.pb
-    └── EDSR_x4.pb
+`-- opencv/
+    |-- FSRCNN_x2.pb
+    `-- EDSR_x4.pb
 ```
 
 ## Run Locally
 
 ```bash
 streamlit run app.py
+```
+
+If you are using the project-local virtual environment on Windows:
+
+```powershell
+.\.venv\Scripts\python.exe -m streamlit run app.py
 ```
 
 ## App Workflow
