@@ -28,10 +28,13 @@ def load_uploaded_image(uploaded_file) -> tuple[Image.Image, bytes]:
 
 
 def get_image_details(image: Image.Image, image_bytes: bytes, filename: str) -> dict[str, str | int]:
+    gcd = __import__("math").gcd(image.width, image.height)
+    aspect_ratio = f"{image.width // gcd}:{image.height // gcd}" if gcd else "N/A"
     return {
         "name": filename,
         "width": image.width,
         "height": image.height,
+        "aspect_ratio": aspect_ratio,
         "mode": image.mode,
         "format": image.format or "PNG",
         "size_kb": max(1, round(len(image_bytes) / 1024)),

@@ -280,8 +280,14 @@ def render_image_details(details: dict[str, str | int], title: str) -> None:
     st.markdown(
         f"""
         <div class="info-card">
+            <div class="metric-label">Filename</div>
+            <div class="metric-value">{details["name"]}</div>
+            <div style="height:0.9rem;"></div>
             <div class="metric-label">Dimensions</div>
             <div class="metric-value">{details["width"]} x {details["height"]} px</div>
+            <div style="height:0.9rem;"></div>
+            <div class="metric-label">Aspect Ratio</div>
+            <div class="metric-value">{details["aspect_ratio"]}</div>
             <div style="height:0.9rem;"></div>
             <div class="metric-label">Mode</div>
             <div class="metric-value">{details["mode"]}</div>
