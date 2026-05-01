@@ -4,7 +4,7 @@ from time import perf_counter
 
 import streamlit as st
 
-from pixelboost.config import APP_DESCRIPTION, APP_NAME, SUPPORTED_FORMATS
+from pixelboost.config import APP_DESCRIPTION, APP_NAME, LARGE_IMAGE_WARNING_PIXELS, SUPPORTED_FORMATS
 from pixelboost.image_utils import (
     build_download_filename,
     get_image_details,
@@ -381,6 +381,13 @@ def render_upscale_estimate(width: int, height: int, scale: int) -> None:
     )
 
 
+def render_large_image_caution(width: int, height: int, scale: int) -> None:
+    if width * height >= LARGE_IMAGE_WARNING_PIXELS:
+        st.warning(
+            f"This image is quite large. `{scale}x` processing may take longer on CPU, especially when preview rendering is included."
+        )
+
+
 def render_enhancement_summary(original_details, enhanced_details, scale: int, backend_name: str, elapsed_seconds: float) -> None:
     width_gain = enhanced_details["width"] - original_details["width"]
     height_gain = enhanced_details["height"] - original_details["height"]
@@ -448,6 +455,7 @@ def main() -> None:
         st.warning(runtime_note)
 
     render_upscale_estimate(original_image.width, original_image.height, scale)
+    render_large_image_caution(original_image.width, original_image.height, scale)
 
     if not st.button("Upscale Image", type="primary", use_container_width=True):
         return
