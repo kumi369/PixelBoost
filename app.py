@@ -308,6 +308,7 @@ def render_image_details(details: dict[str, str | int], title: str) -> None:
 
 def render_comparison(original, enhanced) -> None:
     st.subheader("Before / After Comparison")
+    st.caption("Focus on edges, facial details, text sharpness, and compression artifacts while comparing the two versions.")
     if image_comparison is not None:
         image_comparison(
             img1=original.convert("RGB"),
@@ -316,6 +317,7 @@ def render_comparison(original, enhanced) -> None:
             label2="Upscaled",
             width=760,
         )
+        st.caption("Drag the slider left and right to inspect the enhancement.")
         return
 
     left, right = st.columns(2)
