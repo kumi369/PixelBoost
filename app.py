@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from time import perf_counter
+
 import streamlit as st
 
 from pixelboost.config import APP_DESCRIPTION, APP_NAME, SUPPORTED_FORMATS
@@ -379,17 +381,18 @@ def render_upscale_estimate(width: int, height: int, scale: int) -> None:
     )
 
 
-def render_enhancement_summary(original_details, enhanced_details, scale: int, backend_name: str) -> None:
+def render_enhancement_summary(original_details, enhanced_details, scale: int, backend_name: str, elapsed_seconds: float) -> None:
     width_gain = enhanced_details["width"] - original_details["width"]
     height_gain = enhanced_details["height"] - original_details["height"]
     pixel_multiplier = (
         (enhanced_details["width"] * enhanced_details["height"])
         // max(1, original_details["width"] * original_details["height"])
     )
-    col1, col2, col3 = st.columns(3)
+    col1, col2, col3, col4 = st.columns(4)
     col1.metric("Upscale Factor", f"{scale}x")
     col2.metric("Dimension Gain", f"+{width_gain} x +{height_gain}")
     col3.metric("Pixel Growth", f"{pixel_multiplier}x")
+    col4.metric("Processing Time", f"{elapsed_seconds:.2f}s")
     st.caption(f"Processed using `{backend_name}`.")
 
 
@@ -452,6 +455,7 @@ def main() -> None:
     progress = st.progress(0, text="Preparing image...")
     status_box = st.empty()
     status_box.info("Preparing image for enhancement...")
+    started_at = perf_counter()
 
     try:
         progress.progress(15, text="Loading pretrained model...")
@@ -481,10 +485,11 @@ def main() -> None:
 
     enhanced_bytes = image_to_download_bytes(enhanced_image)
     enhanced_details = get_image_details(enhanced_image, enhanced_bytes, f"pixelboost_{uploaded_file.name}")
+    elapsed_seconds = perf_counter() - started_at
     status_box.success("Image enhancement finished successfully.")
 
     st.markdown('<p class="success-chip">Upscaling completed successfully</p>', unsafe_allow_html=True)
-    render_enhancement_summary(original_details, enhanced_details, scale, backend_name)
+    render_enhancement_summary(original_details, enhanced_details, scale, backend_name, elapsed_seconds)
 
     output_col, output_details_col = st.columns([1.5, 1], gap="large")
     with output_col:
