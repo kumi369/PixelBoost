@@ -2,6 +2,23 @@
 
 PixelBoost is a polished Streamlit web app for AI-powered image upscaling. Users can upload a low-resolution image, enhance it with a pretrained super-resolution model, compare before and after results, and download the improved output.
 
+## Why PixelBoost
+
+PixelBoost was built as a resume-ready AI project that feels like a real product instead of a basic script. It combines:
+
+- A usable web interface built with Streamlit
+- High-quality super-resolution through Real-ESRGAN
+- A reliable OpenCV fallback path for practical demos
+- Clear before/after proof, metadata, and downloadable results
+
+## Highlights
+
+- `High Quality Mode`: Real-ESRGAN for sharper enhancement
+- `Reliable Demo Path`: OpenCV fallback when heavier dependencies are unavailable
+- `Visual Comparison`: Before/after slider for easy result validation
+- `Insightful UI`: Metadata, estimated output size, processing time, and result summary
+- `Portfolio Friendly`: Modular code, setup docs, troubleshooting, and resume bullets
+
 ## Features
 
 - Single image upload with support for `JPG`, `JPEG`, `PNG`, and `WEBP`
@@ -133,6 +150,12 @@ If you are using the project-local virtual environment on Windows:
 .\.venv\Scripts\python.exe -m streamlit run app.py
 ```
 
+Then open:
+
+```text
+http://127.0.0.1:8501
+```
+
 ## App Workflow
 
 1. Open the Streamlit app.
@@ -142,6 +165,18 @@ If you are using the project-local virtual environment on Windows:
 5. Click `Upscale Image`.
 6. Compare the original and enhanced outputs.
 7. Download the processed image.
+
+## Demo Flow
+
+Use this sequence for a clean college or interview demo:
+
+1. Open the app and explain that PixelBoost is an AI image upscaling tool.
+2. Upload a visibly compressed or low-resolution image.
+3. Show the input metadata and estimated output resolution.
+4. Run `2x` first for a quick proof, then `4x` for a stronger enhancement pass.
+5. Use the comparison slider to point out sharper edges, clearer textures, and better visual detail.
+6. Highlight the processing time, output summary, and download flow.
+7. Mention that Real-ESRGAN is the preferred quality backend and OpenCV is kept as a practical fallback.
 
 ## Notes
 
@@ -175,6 +210,12 @@ Use these points while presenting PixelBoost:
 - Show one compressed portrait or product image and compare sharpness around edges, facial details, and text-like regions.
 - Mention that the app surfaces metadata, estimated output size, processing time, and before/after proof to make the result easier to evaluate.
 - Highlight that the codebase is modular, with separate helpers for UI, image handling, and super-resolution logic.
+
+Short interview summary:
+
+- PixelBoost is an end-to-end AI image upscaling application built for real usage, not just model experimentation.
+- It integrates pretrained super-resolution models into a web product workflow with upload, preview, enhancement, comparison, and export.
+- It also handles practical engineering concerns such as fallbacks, processing feedback, metadata visibility, and demo reliability.
 
 Sample resume bullets:
 
