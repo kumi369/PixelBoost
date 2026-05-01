@@ -166,3 +166,18 @@ PixelBoost demonstrates:
 - Streamlit app development for an end-to-end product workflow
 - Image preprocessing and postprocessing with Pillow and OpenCV
 - Error handling, caching, and deployment-ready project structure
+
+## Demo and Resume Tips
+
+Use these points while presenting PixelBoost:
+
+- Explain that the app prefers Real-ESRGAN when available, but includes a practical OpenCV fallback so demos stay reliable on CPU systems.
+- Show one compressed portrait or product image and compare sharpness around edges, facial details, and text-like regions.
+- Mention that the app surfaces metadata, estimated output size, processing time, and before/after proof to make the result easier to evaluate.
+- Highlight that the codebase is modular, with separate helpers for UI, image handling, and super-resolution logic.
+
+Sample resume bullets:
+
+- Built `PixelBoost`, an AI image upscaling web app using Python, Streamlit, and pretrained super-resolution models.
+- Implemented upload, enhancement, comparison, and export workflows with CPU-friendly fallback logic for reliable demos.
+- Improved usability through metadata panels, runtime feedback, performance safeguards, and download-ready outputs.
