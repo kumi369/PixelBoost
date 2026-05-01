@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from io import BytesIO
+from pathlib import Path
 
 import numpy as np
 from PIL import Image, UnidentifiedImageError
@@ -76,3 +77,10 @@ def image_to_download_bytes(image: Image.Image) -> bytes:
     save_format = "PNG" if image.mode == "RGBA" else "PNG"
     image.save(buffer, format=save_format)
     return buffer.getvalue()
+
+
+def build_download_filename(original_filename: str) -> str:
+    stem = Path(original_filename).stem or "image"
+    safe_stem = "".join(char if char.isalnum() or char in ("-", "_") else "_" for char in stem)
+    safe_stem = safe_stem.strip("_") or "image"
+    return f"pixelboost_{safe_stem}.png"

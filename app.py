@@ -4,6 +4,7 @@ import streamlit as st
 
 from pixelboost.config import APP_DESCRIPTION, APP_NAME, SUPPORTED_FORMATS
 from pixelboost.image_utils import (
+    build_download_filename,
     get_image_details,
     image_to_download_bytes,
     load_uploaded_image,
@@ -498,7 +499,7 @@ def main() -> None:
     st.download_button(
         label="Download Enhanced Image",
         data=enhanced_bytes,
-        file_name=f"pixelboost_{uploaded_file.name.rsplit('.', 1)[0]}.png",
+        file_name=build_download_filename(uploaded_file.name),
         mime="image/png",
         use_container_width=True,
     )
