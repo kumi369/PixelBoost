@@ -150,6 +150,14 @@ If you are using the project-local virtual environment on Windows:
 - Transparent PNG images are supported; alpha is restored after RGB upscaling.
 - Large `4x` images on CPU automatically switch to a faster progressive OpenCV path for a smoother demo experience.
 
+## Troubleshooting
+
+- If the app says a model file is missing, confirm the `.pth` or `.pb` file is placed in the exact folder shown in the README.
+- If `4x` feels slow on a laptop CPU, try `2x` first or test with a smaller input image.
+- If the comparison slider does not appear, make sure `streamlit-image-comparison` is installed from `requirements.txt`.
+- If Real-ESRGAN dependencies are heavy for your system, keep using the OpenCV fallback path for demos.
+- If the app does not start from the project virtual environment, run `.\.venv\Scripts\python.exe -m streamlit run app.py`.
+
 ## Resume-Friendly Summary
 
 PixelBoost demonstrates:
