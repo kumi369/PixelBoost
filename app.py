@@ -378,6 +378,20 @@ def render_upscale_estimate(width: int, height: int, scale: int) -> None:
     )
 
 
+def render_enhancement_summary(original_details, enhanced_details, scale: int, backend_name: str) -> None:
+    width_gain = enhanced_details["width"] - original_details["width"]
+    height_gain = enhanced_details["height"] - original_details["height"]
+    pixel_multiplier = (
+        (enhanced_details["width"] * enhanced_details["height"])
+        // max(1, original_details["width"] * original_details["height"])
+    )
+    col1, col2, col3 = st.columns(3)
+    col1.metric("Upscale Factor", f"{scale}x")
+    col2.metric("Dimension Gain", f"+{width_gain} x +{height_gain}")
+    col3.metric("Pixel Growth", f"{pixel_multiplier}x")
+    st.caption(f"Processed using `{backend_name}`.")
+
+
 def main() -> None:
     inject_styles()
     render_header()
@@ -469,7 +483,7 @@ def main() -> None:
     status_box.success("Image enhancement finished successfully.")
 
     st.markdown('<p class="success-chip">Upscaling completed successfully</p>', unsafe_allow_html=True)
-    st.caption(f"Backend used: `{backend_name}`")
+    render_enhancement_summary(original_details, enhanced_details, scale, backend_name)
 
     output_col, output_details_col = st.columns([1.5, 1], gap="large")
     with output_col:
