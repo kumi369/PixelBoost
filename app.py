@@ -369,6 +369,15 @@ def render_image_panel(title: str, copy: str) -> None:
     )
 
 
+def render_upscale_estimate(width: int, height: int, scale: int) -> None:
+    est_width = width * scale
+    est_height = height * scale
+    growth = scale * scale
+    st.caption(
+        f"Estimated output at `{scale}x`: `{est_width} x {est_height}` px, about `{growth}x` more pixels than the source."
+    )
+
+
 def main() -> None:
     inject_styles()
     render_header()
@@ -419,6 +428,8 @@ def main() -> None:
 
     if runtime_note:
         st.warning(runtime_note)
+
+    render_upscale_estimate(original_image.width, original_image.height, scale)
 
     if not st.button("Upscale Image", type="primary", use_container_width=True):
         return
