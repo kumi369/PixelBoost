@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 from functools import lru_cache
+import sys
+import types
 
 import cv2
 from PIL import Image
@@ -49,6 +51,13 @@ class RealESRGANUpscaler(BaseUpscaler):
 
         try:
             import torch
+            import torchvision.transforms.functional as tv_functional
+
+            if "torchvision.transforms.functional_tensor" not in sys.modules:
+                functional_tensor_module = types.ModuleType("torchvision.transforms.functional_tensor")
+                functional_tensor_module.rgb_to_grayscale = tv_functional.rgb_to_grayscale
+                sys.modules["torchvision.transforms.functional_tensor"] = functional_tensor_module
+
             from basicsr.archs.rrdbnet_arch import RRDBNet
             from realesrgan import RealESRGANer
         except ImportError as exc:
