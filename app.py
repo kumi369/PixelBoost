@@ -186,6 +186,14 @@ def inject_styles() -> None:
                 color: #94a3b8;
                 font-size: 0.9rem;
             }
+            .compare-note {
+                padding: 0.9rem 1rem;
+                margin-bottom: 0.8rem;
+                border-radius: 16px;
+                border: 1px solid rgba(255, 255, 255, 0.08);
+                background: rgba(255, 255, 255, 0.04);
+                color: #cbd5e1;
+            }
             .metric-label {
                 color: #94a3b8;
                 font-size: 0.88rem;
@@ -320,6 +328,14 @@ def render_image_details(details: dict[str, str | int], title: str) -> None:
 def render_comparison(original, enhanced) -> None:
     st.subheader("Before / After Comparison")
     st.caption("Focus on edges, facial details, text sharpness, and compression artifacts while comparing the two versions.")
+    st.markdown(
+        """
+        <div class="compare-note">
+            Check these areas first: edge sharpness, eye and face clarity, textured surfaces, and any small text or logos.
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
     if image_comparison is not None:
         image_comparison(
             img1=original.convert("RGB"),
