@@ -339,6 +339,10 @@ def render_upload_guidance() -> None:
     )
 
 
+def render_supported_formats_note() -> None:
+    st.caption("Supported upload formats: `JPG`, `JPEG`, `PNG`, `WEBP`")
+
+
 def render_empty_state() -> None:
     st.markdown(
         """
@@ -421,6 +425,7 @@ def main() -> None:
 
     st.markdown('<div class="section-kicker">Upload</div>', unsafe_allow_html=True)
     render_upload_guidance()
+    render_supported_formats_note()
     uploaded_file = st.file_uploader(
         "Upload an image",
         type=SUPPORTED_FORMATS,
