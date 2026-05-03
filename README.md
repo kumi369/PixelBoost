@@ -247,6 +247,13 @@ Use this sequence for a clean college or interview demo:
 - Deployment guide for Streamlit Cloud or Hugging Face Spaces
 - Portrait-specific enhancement path for face-heavy inputs
 
+## Deployment Notes
+
+- Streamlit Cloud is a good fit when you want the simplest public demo link.
+- Hugging Face Spaces is useful when you want to position the app among other AI demos.
+- For public deployment, keep large model weights out of Git and document the post-deploy download/setup path clearly.
+- If the target environment has limited resources, keep the OpenCV fallback path available for reliability.
+
 ## Resume-Friendly Summary
 
 PixelBoost demonstrates:
