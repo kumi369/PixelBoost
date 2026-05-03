@@ -343,6 +343,13 @@ def render_supported_formats_note() -> None:
     st.caption("Supported upload formats: `JPG`, `JPEG`, `PNG`, `WEBP`")
 
 
+def render_scale_guidance(scale: int) -> None:
+    if scale == 2:
+        st.caption("`2x` is best for quicker enhancement passes and lighter demo images.")
+    else:
+        st.caption("`4x` is best when you want a stronger jump in detail and output resolution.")
+
+
 def render_empty_state() -> None:
     st.markdown(
         """
@@ -461,6 +468,7 @@ def main() -> None:
     if runtime_note:
         st.warning(runtime_note)
 
+    render_scale_guidance(scale)
     render_upscale_estimate(original_image.width, original_image.height, scale)
     render_large_image_caution(original_image.width, original_image.height, scale)
 
