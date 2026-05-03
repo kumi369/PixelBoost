@@ -180,6 +180,12 @@ http://127.0.0.1:8501
 6. Compare the original and enhanced outputs.
 7. Download the processed image.
 
+## Choosing 2x vs 4x
+
+- Use `2x` when you want a faster enhancement pass and a lighter demo flow.
+- Use `4x` when the image is very small and you want a stronger jump in output resolution.
+- For slower machines, start with `2x` first and move to `4x` only when you need more detail.
+
 ## Demo Flow
 
 Use this sequence for a clean college or interview demo:
