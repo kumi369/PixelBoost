@@ -448,6 +448,13 @@ def render_enhancement_summary(original_details, enhanced_details, scale: int, b
     )
 
 
+def render_footer() -> None:
+    st.markdown("---")
+    st.caption(
+        "PixelBoost blends a polished Streamlit workflow with Real-ESRGAN quality and a practical OpenCV fallback for dependable demos."
+    )
+
+
 def main() -> None:
     inject_styles()
     render_header()
@@ -567,6 +574,7 @@ def main() -> None:
         use_container_width=True,
     )
     st.caption("Downloads are exported as `PNG` for a consistent high-quality output format.")
+    render_footer()
 
 
 if __name__ == "__main__":
