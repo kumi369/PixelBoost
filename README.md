@@ -19,6 +19,20 @@ PixelBoost was built as a resume-ready AI project that feels like a real product
 - `Insightful UI`: Metadata, estimated output size, processing time, and result summary
 - `Portfolio Friendly`: Modular code, setup docs, troubleshooting, and resume bullets
 
+## Quick Start
+
+If the project is already configured locally, the shortest launch path is:
+
+```powershell
+.\.venv\Scripts\python.exe -m streamlit run app.py
+```
+
+Then visit:
+
+```text
+http://127.0.0.1:8501
+```
+
 ## Features
 
 - Single image upload with support for `JPG`, `JPEG`, `PNG`, and `WEBP`
