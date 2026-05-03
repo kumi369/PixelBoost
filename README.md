@@ -125,6 +125,12 @@ Download these official weights from the Real-ESRGAN project releases and place 
 - `RealESRGAN_x4plus.pth`
   Source: [Real-ESRGAN releases](https://github.com/xinntao/Real-ESRGAN/releases/download/v0.1.0/RealESRGAN_x4plus.pth)
 
+You can also use the included PowerShell helper:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\download_realesrgan_weights.ps1
+```
+
 Expected layout:
 
 ```text
