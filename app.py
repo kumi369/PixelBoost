@@ -550,6 +550,7 @@ def main() -> None:
         mime="image/png",
         use_container_width=True,
     )
+    st.caption("Downloads are exported as `PNG` for a consistent high-quality output format.")
 
 
 if __name__ == "__main__":
