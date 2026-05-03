@@ -74,6 +74,13 @@ PixelBoost/
     `-- download_opencv_models.ps1
 ```
 
+## Architecture Overview
+
+- `app.py` handles the Streamlit interface, layout, user interactions, and result rendering.
+- `pixelboost/image_utils.py` handles image loading, metadata extraction, conversion helpers, and download output generation.
+- `pixelboost/super_resolution.py` manages backend selection between Real-ESRGAN and the OpenCV fallback path.
+- `pixelboost/config.py` centralizes model paths, supported formats, and runtime thresholds.
+
 ## Setup
 
 1. Create and activate a virtual environment.
