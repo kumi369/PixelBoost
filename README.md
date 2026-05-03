@@ -212,6 +212,13 @@ Use this sequence for a clean college or interview demo:
 - Transparent PNG images are supported; alpha is restored after RGB upscaling.
 - Large `4x` images on CPU automatically switch to a faster progressive OpenCV path for a smoother demo experience.
 
+## Project Strengths
+
+- Combines AI model usage with a visible end-user product workflow.
+- Gives both technical and visual proof through metrics, metadata, and comparison UI.
+- Stays practical for demos because it can fall back gracefully when a heavy backend is unavailable.
+- Uses modular Python files that are easy to explain during code walkthroughs.
+
 ## Troubleshooting
 
 - If the app says a model file is missing, confirm the `.pth` or `.pb` file is placed in the exact folder shown in the README.
