@@ -254,6 +254,14 @@ Use this sequence for a clean college or interview demo:
 - For public deployment, keep large model weights out of Git and document the post-deploy download/setup path clearly.
 - If the target environment has limited resources, keep the OpenCV fallback path available for reliability.
 
+## Testing Checklist
+
+- Launch the app and confirm the home screen renders without errors.
+- Upload a supported image and verify metadata appears correctly.
+- Run both `2x` and `4x` once to confirm the active backend behaves as expected.
+- Check the comparison section, result summary, and download button.
+- Verify that the generated output file opens correctly after download.
+
 ## Resume-Friendly Summary
 
 PixelBoost demonstrates:
