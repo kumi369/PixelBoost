@@ -227,6 +227,14 @@ Use this sequence for a clean college or interview demo:
 - If Real-ESRGAN dependencies are heavy for your system, keep using the OpenCV fallback path for demos.
 - If the app does not start from the project virtual environment, run `.\.venv\Scripts\python.exe -m streamlit run app.py`.
 
+## Future Improvements
+
+- Batch image upscaling for multiple files in one run
+- Optional backend selector for explicit demo control
+- Embedded sample screenshots inside the README
+- Deployment guide for Streamlit Cloud or Hugging Face Spaces
+- Portrait-specific enhancement path for face-heavy inputs
+
 ## Resume-Friendly Summary
 
 PixelBoost demonstrates:
