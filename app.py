@@ -206,6 +206,17 @@ def inject_styles() -> None:
                 font-size: 0.88rem;
                 font-weight: 600;
             }
+            .backend-chip {
+                display: inline-block;
+                padding: 0.35rem 0.7rem;
+                border-radius: 999px;
+                background: rgba(59, 130, 246, 0.14);
+                color: #bfdbfe;
+                border: 1px solid rgba(59, 130, 246, 0.25);
+                font-size: 0.85rem;
+                font-weight: 600;
+                margin-left: 0.5rem;
+            }
             @media (max-width: 900px) {
                 .hero-grid,
                 .hero-metrics,
@@ -516,7 +527,10 @@ def main() -> None:
     elapsed_seconds = perf_counter() - started_at
     status_box.success("Image enhancement finished successfully.")
 
-    st.markdown('<p class="success-chip">Upscaling completed successfully</p>', unsafe_allow_html=True)
+    st.markdown(
+        f'<p class="success-chip">Upscaling completed successfully</p><span class="backend-chip">{backend_name}</span>',
+        unsafe_allow_html=True,
+    )
     render_enhancement_summary(original_details, enhanced_details, scale, backend_name, elapsed_seconds)
 
     output_col, output_details_col = st.columns([1.5, 1], gap="large")
