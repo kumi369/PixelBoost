@@ -496,7 +496,7 @@ def main() -> None:
         st.image(original_image, use_container_width=True)
     with details_col:
         if show_metadata:
-            render_image_details(original_details, "Input Details")
+            render_image_details(original_details, "Input Metadata")
 
     try:
         runtime_note = get_runtime_note(original_image, scale)
@@ -562,7 +562,7 @@ def main() -> None:
         st.image(enhanced_image, use_container_width=True)
     with output_details_col:
         if show_metadata:
-            render_image_details(enhanced_details, "Output Details")
+            render_image_details(enhanced_details, "Output Metadata")
 
     render_comparison(original_image, enhanced_image)
 
