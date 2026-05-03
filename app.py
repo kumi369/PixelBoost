@@ -416,6 +416,9 @@ def render_enhancement_summary(original_details, enhanced_details, scale: int, b
     col4.metric("Processing Time", f"{elapsed_seconds:.2f}s")
     col5.metric("File Size Change", f"{size_gain:+} KB")
     st.caption(f"Processed using `{backend_name}`.")
+    st.caption(
+        f"The source image moved from `{original_details['width']} x {original_details['height']}` to `{enhanced_details['width']} x {enhanced_details['height']}`."
+    )
 
 
 def main() -> None:
