@@ -408,11 +408,13 @@ def render_enhancement_summary(original_details, enhanced_details, scale: int, b
         (enhanced_details["width"] * enhanced_details["height"])
         // max(1, original_details["width"] * original_details["height"])
     )
-    col1, col2, col3, col4 = st.columns(4)
+    size_gain = enhanced_details["size_kb"] - original_details["size_kb"]
+    col1, col2, col3, col4, col5 = st.columns(5)
     col1.metric("Upscale Factor", f"{scale}x")
     col2.metric("Dimension Gain", f"+{width_gain} x +{height_gain}")
     col3.metric("Pixel Growth", f"{pixel_multiplier}x")
     col4.metric("Processing Time", f"{elapsed_seconds:.2f}s")
+    col5.metric("File Size Change", f"{size_gain:+} KB")
     st.caption(f"Processed using `{backend_name}`.")
 
 
