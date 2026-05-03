@@ -177,6 +177,12 @@ If you are using the project-local virtual environment on Windows:
 .\.venv\Scripts\python.exe -m streamlit run app.py
 ```
 
+Backend verification helper:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\verify_backend.ps1
+```
+
 Then open:
 
 ```text
