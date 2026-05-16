@@ -39,6 +39,10 @@ class BaseUpscaler:
         return None
 
 
+def should_prefer_fast_path(image: Image.Image, scale: int) -> bool:
+    return scale == 4 and image.width * image.height >= FAST_4X_MAX_INPUT_PIXELS
+
+
 class RealESRGANUpscaler(BaseUpscaler):
     def __init__(self, scale: int) -> None:
         self.scale = scale
@@ -160,8 +164,19 @@ class OpenCVUpscaler(BaseUpscaler):
         return self.sr.upsample(image_array)
 
 
-@lru_cache(maxsize=4)
-def get_upscaler(scale: int) -> BaseUpscaler:
+@lru_cache(maxsize=12)
+def get_upscaler(scale: int, backend_preference: str = "quality") -> BaseUpscaler:
+    if backend_preference == "fast":
+        try:
+            return OpenCVUpscaler(scale)
+        except ModelConfigurationError as opencv_error:
+            try:
+                return RealESRGANUpscaler(scale)
+            except ModelConfigurationError as real_esrgan_error:
+                raise ModelConfigurationError(
+                    f"{opencv_error} Fallback unavailable: {real_esrgan_error}"
+                ) from real_esrgan_error
+
     try:
         return RealESRGANUpscaler(scale)
     except ModelConfigurationError as real_esrgan_error:
@@ -173,16 +188,25 @@ def get_upscaler(scale: int) -> BaseUpscaler:
             ) from opencv_error
 
 
-def upscale_image(image: Image.Image, scale: int) -> tuple[Image.Image, str]:
-    upscaler = get_upscaler(scale)
+def upscale_image(image: Image.Image, scale: int, backend_preference: str = "quality") -> tuple[Image.Image, str]:
+    if backend_preference == "auto" and should_prefer_fast_path(image, scale):
+        upscaler = get_upscaler(scale, "fast")
+    else:
+        upscaler = get_upscaler(scale, backend_preference)
     result = upscaler.upscale(image)
     return result, upscaler.backend_name
 
 
-def get_runtime_note(image: Image.Image, scale: int) -> str | None:
-    if scale == 4 and image.width * image.height >= FAST_4X_MAX_INPUT_PIXELS:
-        if REALESRGAN_MODEL_PATHS.get(scale, None) and REALESRGAN_MODEL_PATHS[scale].exists():
-            return "Large 4x images may take longer because the high-quality Real-ESRGAN backend is being used."
+def get_runtime_note(image: Image.Image, scale: int, backend_preference: str = "quality") -> str | None:
+    if should_prefer_fast_path(image, scale):
+        if backend_preference == "auto":
+            return "Auto Balance will switch large 4x images to a faster backend to keep wait times practical."
+
+        if backend_preference == "quality" and REALESRGAN_MODEL_PATHS.get(scale, None) and REALESRGAN_MODEL_PATHS[scale].exists():
+            return "Maximum Quality keeps Real-ESRGAN active for large 4x images, so processing may take longer."
+
+        if backend_preference == "fast":
+            return "Faster Processing prefers the OpenCV path for large 4x images to reduce wait time."
 
         if OPENCV_PROGRESSIVE_MODEL_PATH.exists():
             return "Large 4x images use a faster progressive OpenCV path to keep processing practical on CPU."

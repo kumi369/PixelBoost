@@ -4,7 +4,7 @@ from time import perf_counter
 
 import streamlit as st
 
-from pixelboost.config import APP_DESCRIPTION, APP_NAME, LARGE_IMAGE_WARNING_PIXELS, SUPPORTED_FORMATS
+from pixelboost.config import APP_DESCRIPTION, APP_NAME, LARGE_IMAGE_WARNING_PIXELS, QUALITY_PROFILES, SUPPORTED_FORMATS
 from pixelboost.image_utils import (
     build_download_filename,
     get_image_details,
@@ -377,6 +377,15 @@ def render_scale_guidance(scale: int) -> None:
         st.caption("`4x` is best when you want a stronger jump in detail and output resolution.")
 
 
+def render_quality_profile_guidance(profile: str) -> None:
+    if profile == "quality":
+        st.caption("`Maximum Quality` preserves the current Real-ESRGAN-first behavior for the best visual output.")
+    elif profile == "auto":
+        st.caption("`Auto Balance` keeps small images high-quality and speeds up larger 4x requests when helpful.")
+    else:
+        st.caption("`Faster Processing` prefers the quicker backend first, which can reduce wait time on larger files.")
+
+
 def render_empty_state() -> None:
     st.markdown(
         """
@@ -463,6 +472,12 @@ def main() -> None:
     with st.sidebar:
         st.header("Settings")
         scale = st.selectbox("Upscale factor", options=[2, 4], index=1, format_func=lambda value: f"{value}x")
+        quality_profile = st.selectbox(
+            "Quality profile",
+            options=list(QUALITY_PROFILES.keys()),
+            index=0,
+            format_func=lambda key: QUALITY_PROFILES[key],
+        )
         st.caption("PixelBoost prefers Real-ESRGAN and falls back to a lighter pretrained OpenCV model if needed.")
         show_metadata = st.toggle("Show image metadata", value=True)
         st.markdown("---")
@@ -499,7 +514,7 @@ def main() -> None:
             render_image_details(original_details, "Input Metadata")
 
     try:
-        runtime_note = get_runtime_note(original_image, scale)
+        runtime_note = get_runtime_note(original_image, scale, quality_profile)
     except ModelConfigurationError as exc:
         runtime_note = None
         st.info(f"Model check note: {exc}")
@@ -508,6 +523,7 @@ def main() -> None:
         st.warning(runtime_note)
 
     render_scale_guidance(scale)
+    render_quality_profile_guidance(quality_profile)
     render_upscale_estimate(original_image.width, original_image.height, scale)
     render_large_image_caution(original_image.width, original_image.height, scale)
 
@@ -524,7 +540,7 @@ def main() -> None:
         status_box.info("Loading the best available super-resolution backend...")
         progress.progress(45, text="Enhancing image...")
         status_box.info("Enhancing image. Larger 4x images can take longer on CPU.")
-        enhanced_image, backend_name = upscale_image(original_image, scale=scale)
+        enhanced_image, backend_name = upscale_image(original_image, scale=scale, backend_preference=quality_profile)
         progress.progress(85, text="Rendering comparison...")
         status_box.info("Rendering final preview and download output...")
         progress.progress(100, text="Enhancement complete.")

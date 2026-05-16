@@ -14,6 +14,7 @@ PixelBoost was built as a resume-ready AI project that feels like a real product
 ## Highlights
 
 - `High Quality Mode`: Real-ESRGAN for sharper enhancement
+- `Quality Profiles`: Maximum Quality, Auto Balance, and Faster Processing
 - `Reliable Demo Path`: OpenCV fallback when heavier dependencies are unavailable
 - `Visual Comparison`: Before/after slider for easy result validation
 - `Insightful UI`: Metadata, estimated output size, processing time, and result summary
@@ -206,6 +207,12 @@ http://127.0.0.1:8501
 - Use `2x` when you want a faster enhancement pass and a lighter demo flow.
 - Use `4x` when the image is very small and you want a stronger jump in output resolution.
 - For slower machines, start with `2x` first and move to `4x` only when you need more detail.
+
+## Quality Profiles
+
+- `Maximum Quality`: Keeps the current Real-ESRGAN-first behavior for the best visual output.
+- `Auto Balance`: Preserves high quality for smaller images and switches large `4x` requests to a faster path when helpful.
+- `Faster Processing`: Prefers the OpenCV backend first when you want shorter waits over maximum quality.
 
 ## Demo Flow
 

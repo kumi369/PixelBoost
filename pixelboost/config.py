@@ -5,6 +5,11 @@ from pathlib import Path
 APP_NAME = "PixelBoost"
 APP_DESCRIPTION = "AI-powered image upscaling for clearer, sharper visuals in a polished Streamlit experience."
 SUPPORTED_FORMATS = ["jpg", "jpeg", "png", "webp"]
+QUALITY_PROFILES = {
+    "quality": "Maximum Quality",
+    "auto": "Auto Balance",
+    "fast": "Faster Processing",
+}
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 MODEL_DIR = PROJECT_ROOT / "models"
