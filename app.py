@@ -250,8 +250,8 @@ def render_header() -> None:
                     <p style="margin:0 0 1rem;color:#cbd5e1;font-size:1.03rem;max-width:48rem;">{APP_DESCRIPTION}</p>
                     <div class="hero-metrics">
                         <div class="hero-metric">
-                            <div class="hero-metric-label">Modes</div>
-                            <div class="hero-metric-value">2x and 4x</div>
+                            <div class="hero-metric-label">Mode</div>
+                            <div class="hero-metric-value">4x Upscaling</div>
                         </div>
                         <div class="hero-metric">
                             <div class="hero-metric-label">Formats</div>
@@ -371,10 +371,7 @@ def render_supported_formats_note() -> None:
 
 
 def render_scale_guidance(scale: int) -> None:
-    if scale == 2:
-        st.caption("`2x` is best for quicker enhancement passes and lighter demo images.")
-    else:
-        st.caption("`4x` is best when you want a stronger jump in detail and output resolution.")
+    st.caption("`4x` is tuned for the strongest visible improvement in detail and output resolution.")
 
 
 def render_quality_profile_guidance(profile: str) -> None:
@@ -396,8 +393,8 @@ def render_empty_state() -> None:
                 <div class="stage-card-copy">Choose a JPG, PNG, or WEBP image that looks soft, compressed, or too small.</div>
             </div>
             <div class="stage-card">
-                <div class="stage-card-title">2. Pick 2x or 4x</div>
-                <div class="stage-card-copy">Use 2x for a quicker pass or 4x when you want a bigger jump in resolution.</div>
+                <div class="stage-card-title">2. Run 4x Upscaling</div>
+                <div class="stage-card-copy">PixelBoost is now focused on a single high-impact 4x enhancement path for stronger output quality.</div>
             </div>
             <div class="stage-card">
                 <div class="stage-card-title">3. Compare and Export</div>
@@ -471,7 +468,9 @@ def main() -> None:
 
     with st.sidebar:
         st.header("Settings")
-        scale = st.selectbox("Upscale factor", options=[2, 4], index=1, format_func=lambda value: f"{value}x")
+        scale = 4
+        st.markdown("**Upscale factor**")
+        st.caption("`4x` only")
         quality_profile = st.selectbox(
             "Quality profile",
             options=list(QUALITY_PROFILES.keys()),
@@ -482,7 +481,7 @@ def main() -> None:
         show_metadata = st.toggle("Show image metadata", value=True)
         st.markdown("---")
         st.markdown("**Performance Tips**")
-        st.caption("`2x` is faster. `4x` can take longer, especially for large photos on CPU.")
+        st.caption("`4x` can take longer on large photos, especially when Maximum Quality keeps Real-ESRGAN active.")
 
     st.markdown('<div class="section-kicker">Upload</div>', unsafe_allow_html=True)
     render_upload_guidance()

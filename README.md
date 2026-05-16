@@ -197,16 +197,16 @@ http://127.0.0.1:8501
 1. Open the Streamlit app.
 2. Upload a supported image.
 3. Review the original preview and metadata.
-4. Choose `2x` or `4x` upscale.
+4. Run the built-in `4x` upscale flow.
 5. Click `Upscale Image`.
 6. Compare the original and enhanced outputs.
 7. Download the processed image.
 
-## Choosing 2x vs 4x
+## 4x Upscaling Focus
 
-- Use `2x` when you want a faster enhancement pass and a lighter demo flow.
-- Use `4x` when the image is very small and you want a stronger jump in output resolution.
-- For slower machines, start with `2x` first and move to `4x` only when you need more detail.
+- PixelBoost is currently tuned around a single `4x` upscale workflow for stronger visible output changes.
+- This keeps the product story simpler and makes demo results more consistent.
+- Quality profiles still let you choose between `Maximum Quality`, `Auto Balance`, and `Faster Processing`.
 
 ## Quality Profiles
 
@@ -221,7 +221,7 @@ Use this sequence for a clean college or interview demo:
 1. Open the app and explain that PixelBoost is an AI image upscaling tool.
 2. Upload a visibly compressed or low-resolution image.
 3. Show the input metadata and estimated output resolution.
-4. Run `2x` first for a quick proof, then `4x` for a stronger enhancement pass.
+4. Run the built-in `4x` enhancement pass and compare the result.
 5. Use the comparison slider to point out sharper edges, clearer textures, and better visual detail.
 6. Highlight the processing time, output summary, and download flow.
 7. Mention that Real-ESRGAN is the preferred quality backend and OpenCV is kept as a practical fallback.
@@ -243,7 +243,7 @@ Use this sequence for a clean college or interview demo:
 ## Troubleshooting
 
 - If the app says a model file is missing, confirm the `.pth` or `.pb` file is placed in the exact folder shown in the README.
-- If `4x` feels slow on a laptop CPU, try `2x` first or test with a smaller input image.
+- If `4x` feels slow on a laptop CPU, test with a smaller input image or use `Auto Balance` / `Faster Processing`.
 - If the comparison slider does not appear, make sure `streamlit-image-comparison` is installed from `requirements.txt`.
 - If Real-ESRGAN dependencies are heavy for your system, keep using the OpenCV fallback path for demos.
 - If the app does not start from the project virtual environment, run `.\.venv\Scripts\python.exe -m streamlit run app.py`.
@@ -267,7 +267,7 @@ Use this sequence for a clean college or interview demo:
 
 - Launch the app and confirm the home screen renders without errors.
 - Upload a supported image and verify metadata appears correctly.
-- Run both `2x` and `4x` once to confirm the active backend behaves as expected.
+- Run at least one `4x` upscale and confirm the active backend behaves as expected.
 - Check the comparison section, result summary, and download button.
 - Verify that the generated output file opens correctly after download.
 
