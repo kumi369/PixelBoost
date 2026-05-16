@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from io import BytesIO
 from pathlib import Path
+import unicodedata
 
 import numpy as np
 from PIL import Image, UnidentifiedImageError
@@ -81,6 +82,7 @@ def image_to_download_bytes(image: Image.Image) -> bytes:
 
 def build_download_filename(original_filename: str) -> str:
     stem = Path(original_filename).stem or "image"
+    stem = unicodedata.normalize("NFKD", stem).encode("ascii", "ignore").decode("ascii")
     safe_stem = "".join(char if char.isalnum() or char in ("-", "_") else "_" for char in stem)
     safe_stem = safe_stem.strip("_") or "image"
     return f"pixelboost_{safe_stem}.png"

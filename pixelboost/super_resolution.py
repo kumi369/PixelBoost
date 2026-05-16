@@ -180,5 +180,11 @@ def upscale_image(image: Image.Image, scale: int) -> tuple[Image.Image, str]:
 
 
 def get_runtime_note(image: Image.Image, scale: int) -> str | None:
-    upscaler = get_upscaler(scale)
-    return upscaler.get_runtime_note(image)
+    if scale == 4 and image.width * image.height >= FAST_4X_MAX_INPUT_PIXELS:
+        if REALESRGAN_MODEL_PATHS.get(scale, None) and REALESRGAN_MODEL_PATHS[scale].exists():
+            return "Large 4x images may take longer because the high-quality Real-ESRGAN backend is being used."
+
+        if OPENCV_PROGRESSIVE_MODEL_PATH.exists():
+            return "Large 4x images use a faster progressive OpenCV path to keep processing practical on CPU."
+
+    return None

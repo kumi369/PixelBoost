@@ -71,7 +71,9 @@ PixelBoost/
 |   |-- image_utils.py
 |   `-- super_resolution.py
 `-- scripts/
-    `-- download_opencv_models.ps1
+    |-- download_opencv_models.ps1
+    |-- download_realesrgan_weights.ps1
+    `-- verify_backend.ps1
 ```
 
 ## Architecture Overview
